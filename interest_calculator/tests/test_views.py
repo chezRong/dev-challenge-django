@@ -6,6 +6,12 @@ class TestViews(SimpleTestCase):
     def setUp(cls):
         """ Initialise Client """
         cls.client = Client()
+        cls.validParams = {
+            'initial': 1000,
+            'savingsAmount': 100,
+            'interestRate': 1.5,
+            'frequency': 12,
+        }
 
     def call(self, data):
         """ Helper function to call Client with payload """
@@ -31,11 +37,11 @@ class TestViews(SimpleTestCase):
         expected_content = b"Required parameters must be numbers"
         expected_status_code = 400
 
-        resp = self.call({"savingsAmount": 'Hello', "interestRate": 1.5})
+        resp = self.call({**self.validParams, "savingsAmount": 'Hello' })
         self.assertEquals(resp.content, expected_content)
         self.assertEquals(resp.status_code, expected_status_code)
 
-        resp = self.call({"savingsAmount": 1000, "interestRate": 'World'})
+        resp = self.call({**self.validParams, "interestRate": 'World'})
         self.assertEquals(resp.content, expected_content)
         self.assertEquals(resp.status_code, expected_status_code)
 
@@ -44,20 +50,37 @@ class TestViews(SimpleTestCase):
         expected_content = b"Required parameters must be non-negative"
         expected_status_code = 400
 
-        resp = self.call({"savingsAmount": -1000, "interestRate": 1.5})
+        resp = self.call({**self.validParams, "savingsAmount": -1000})
         self.assertEquals(resp.content, expected_content)
         self.assertEquals(resp.status_code, expected_status_code)
 
-        resp = self.call({"savingsAmount": 1000, "interestRate": -1.5})
+        resp = self.call({**self.validParams, "interestRate": -1.5})
         self.assertEquals(resp.content, expected_content)
         self.assertEquals(resp.status_code, expected_status_code)
 
     def test_valid_params(self):
         """ Test Calculator works as expected with correct input """
+        # Monthly Interest
         expected_status_code = 200
         expected_end_value = 91508.31
 
-        resp = self.call({"savingsAmount": 100, "interestRate": 1.5})
+        resp = self.call({**self.validParams})
+        data = loads(resp.content)["result"]
+        self.assertEquals(resp.status_code, expected_status_code)
+        self.assertEquals(data[-1]["amount"], expected_end_value)
+
+        # Quarterly Interest
+        expected_end_value = 91459.44
+
+        resp = self.call({**self.validParams, 'frequency': 4})
+        data = loads(resp.content)["result"]
+        self.assertEquals(resp.status_code, expected_status_code)
+        self.assertEquals(data[-1]["amount"], expected_end_value)
+
+        # Yearly Interest
+        expected_end_value = 91243.04
+
+        resp = self.call({**self.validParams, 'frequency': 1})
         data = loads(resp.content)["result"]
         self.assertEquals(resp.status_code, expected_status_code)
         self.assertEquals(data[-1]["amount"], expected_end_value)

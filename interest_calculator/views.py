@@ -8,7 +8,7 @@ import json
 @csrf_exempt
 def calculate(request):
     params = json.loads(request.body)
-    req_params = ["initial", "savingsAmount", "interestRate"]
+    req_params = ["initial", "savingsAmount", "interestRate", "frequency"]
     req_params_mapped = {k: params.get(k, None) for k in req_params}
 
     # Check Params provided
@@ -29,6 +29,7 @@ def calculate(request):
         initial=req_params_casted["initial"],
         monthly_deposit=req_params_casted["savingsAmount"],
         interest_rate=req_params_casted["interestRate"],
+        frequency=req_params_casted["frequency"],
         duration=50
     )
 

@@ -11,9 +11,11 @@ class App extends Component {
 		params: {
 			initial: 0.0,
 			savingsAmount: 0.0,
-			interestRate: 0.0
+			interestRate: 0.0,
+			frequency: 12,
 		},
 		result: null,
+		view: 0 // Graph = 0, Table = 1
 	}
 
 	recalculate = (key) => {
@@ -22,7 +24,8 @@ class App extends Component {
 			calculate(
 				updatedParams.initial,
 				updatedParams.savingsAmount,
-				updatedParams.interestRate
+				updatedParams.interestRate,
+				updatedParams.frequency,
 			).then(r => this.setState({
 				params: updatedParams,
 				result: r.data.result,
@@ -30,8 +33,12 @@ class App extends Component {
 		}, 250)
 	}
 
+	updateView = (view) => {
+		this.setState({ view })
+	}
+
 	render() {
-	    const {loading, result} = this.state
+	    const {loading} = this.state
 
 		return (
 			<div className="App">
@@ -44,6 +51,8 @@ class App extends Component {
 						<InputGraphSection
 							{...this.state.params}
 							result={this.state.result}
+							view={this.state.view}
+							updateView={this.updateView}
 							recalculate={this.recalculate}
 						/>
                     }
