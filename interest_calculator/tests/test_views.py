@@ -1,5 +1,5 @@
 from django.test import SimpleTestCase, Client
-from json import dumps
+from json import dumps, loads
 
 
 class TestViews(SimpleTestCase):
@@ -54,9 +54,9 @@ class TestViews(SimpleTestCase):
 
     def test_valid_params(self):
         """ Test Calculator works as expected with correct input """
-        # TODO
-        # - Write data quality tests once calculator is implemented
         expected_status_code = 200
+        expected_content = {'result': 91508.31}
         
-        resp = self.call({"savingsAmount": 1000, "interestRate": 1.5})
+        resp = self.call({"savingsAmount": 100, "interestRate": 1.5})
         self.assertEquals(resp.status_code, expected_status_code)
+        self.assertEquals(loads(resp.content), expected_content)

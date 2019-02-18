@@ -1,6 +1,7 @@
 from django.http import JsonResponse, HttpResponseBadRequest
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
+from interest_calculator import calculator
 import json
 
 @require_POST
@@ -24,4 +25,11 @@ def calculate(request):
     if any(v < 0 for v in req_params_casted.values()):
         return HttpResponseBadRequest("Required parameters must be non-negative")
 
-    return JsonResponse({'result': 1000})
+    result = calculator.calculate_payout(
+        initial=1000,
+        monthly_deposit=req_params_casted["savingsAmount"],
+        interest_rate=req_params_casted["interestRate"],
+        duration=50
+    )
+
+    return JsonResponse({'result': result})
