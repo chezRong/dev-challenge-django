@@ -5,6 +5,7 @@
 	"proxy": "http://localhost:8000",
 	"dependencies": {
 		"axios": "^0.17.1",
+		"lodash": "^4.17.11",
 		"react": "^16.2.0",
 		"react-dom": "^16.2.0",
 		"victory": "^0.21.0",

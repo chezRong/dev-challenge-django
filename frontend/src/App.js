@@ -2,19 +2,32 @@ import React, { Component } from "react"
 import { calculate } from "./API"
 import InputGraphSection from './Components/InputGraphSection'
 import "./App.css"
+import { debounce } from 'lodash'
+
 
 class App extends Component {
 	state = {
-		loading: true,
-		result: null
+		loading: false,
+		params: {
+			initial: 0.0,
+			savingsAmount: 0.0,
+			interestRate: 0.0
+		},
+		result: null,
 	}
 
-	componentDidMount() {
-		calculate(1000, 1)
-			.then(r => this.setState({
-            	loading: false,
-                result: r.data.result
+	recalculate = (key) => {
+		return debounce(value => {
+			const updatedParams = { ...this.state.params, [key]: value }
+			calculate(
+				updatedParams.initial,
+				updatedParams.savingsAmount,
+				updatedParams.interestRate
+			).then(r => this.setState({
+				params: updatedParams,
+				result: r.data.result,
 			}))
+		}, 250)
 	}
 
 	render() {
@@ -28,7 +41,11 @@ class App extends Component {
                     {loading ?
                         'Loading...'
                     :
-					 	<InputGraphSection {...{result}}/>
+						<InputGraphSection
+							{...this.state.params}
+							result={this.state.result}
+							recalculate={this.recalculate}
+						/>
                     }
 			</div>
 		)

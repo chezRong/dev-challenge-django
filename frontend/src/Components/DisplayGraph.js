@@ -8,19 +8,19 @@ export default class DisplayGraph extends Component {
 		const { data } = this.props;
 
 		const baseProps = {
-  		width: 450,
-  		height: 300,
-  		padding: 50,
-  		colorScale: ["#48C8FF", "#00b2ff", "#038AD0", "#006C9B"]
+			width: 350,
+			height: 200,
+			padding: 50,
+			colorScale: ["#48C8FF", "#00b2ff", "#038AD0", "#006C9B"]
 		};
 
 		const baseLabelStyles = {
-  		fontFamily: "'Avenir Next', 'Avenir', 'Lato', 'Helvetica', 'Arial', 'Sans-Serif'",
-  		fontSize: 2,
-  		letterSpacing: 'normal',
-  		padding: 10,
-  		fill: "#00b2ff",
-  		stroke: "transparent"
+			fontFamily: "'Avenir Next', 'Avenir', 'Lato', 'Helvetica', 'Arial', 'Sans-Serif'",
+			fontSize: 2,
+			letterSpacing: 'normal',
+			padding: 10,
+			fill: "#00b2ff",
+			stroke: "transparent"
 		};
 
 		const theme = {
@@ -56,7 +56,7 @@ export default class DisplayGraph extends Component {
 		};
 
 		return (
-			<div>
+			<div style={{ maxWidth: '450px', maxHeight: '300px' }}>
 				<VictoryChart animate={{duration: 100}} theme={theme}>
 					<VictoryLine {...{data}} y="amount"/>
 				</VictoryChart>

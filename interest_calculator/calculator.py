@@ -13,6 +13,7 @@ def calculate_payout(initial, monthly_deposit, interest_rate, duration):
     amount, the monthly deposit, the interest rate and the duration in
     years
     """
+    result = []
     interest = (interest_rate / 100) / 12  # Assuming Monthly Interest
     duration_in_months = duration * 12
     rolling = initial
@@ -20,5 +21,6 @@ def calculate_payout(initial, monthly_deposit, interest_rate, duration):
     for month in range(1, duration_in_months + 1):
         rolling += monthly_deposit
         rolling += (rolling * interest)
+        result.append({ 'month': month, 'amount': round(rolling, 2) })
 
-    return round(rolling, 2)
+    return result

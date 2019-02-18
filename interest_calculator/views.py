@@ -8,7 +8,7 @@ import json
 @csrf_exempt
 def calculate(request):
     params = json.loads(request.body)
-    req_params = ["savingsAmount", "interestRate"]
+    req_params = ["initial", "savingsAmount", "interestRate"]
     req_params_mapped = {k: params.get(k, None) for k in req_params}
 
     # Check Params provided
@@ -26,7 +26,7 @@ def calculate(request):
         return HttpResponseBadRequest("Required parameters must be non-negative")
 
     result = calculator.calculate_payout(
-        initial=1000,
+        initial=req_params_casted["initial"],
         monthly_deposit=req_params_casted["savingsAmount"],
         interest_rate=req_params_casted["interestRate"],
         duration=50

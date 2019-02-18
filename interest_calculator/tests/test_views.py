@@ -55,8 +55,9 @@ class TestViews(SimpleTestCase):
     def test_valid_params(self):
         """ Test Calculator works as expected with correct input """
         expected_status_code = 200
-        expected_content = {'result': 91508.31}
-        
+        expected_end_value = 91508.31
+
         resp = self.call({"savingsAmount": 100, "interestRate": 1.5})
+        data = loads(resp.content)["result"]
         self.assertEquals(resp.status_code, expected_status_code)
-        self.assertEquals(loads(resp.content), expected_content)
+        self.assertEquals(data[-1]["amount"], expected_end_value)
