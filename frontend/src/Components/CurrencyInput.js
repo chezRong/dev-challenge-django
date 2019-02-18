@@ -15,6 +15,10 @@ export default class CurrencyInput extends Component {
 	handleChange(e) {
 		const value = e.target.value
 		this.setState({value})
+
+		if (!isNaN(value)) {
+			this.props.update(parseFloat(value))
+		}
 	}
 
 	handleFocus(e) {
@@ -30,7 +34,7 @@ export default class CurrencyInput extends Component {
 		return (
 			<div className={`currency-input ${defaultValue !== undefined ? 'default-value' : ''}`}>
 				<span>£</span>
-				<input type="text"
+				<input type="number"
 					value={value}
 					onChange={this.handleChange.bind(this)}
 					onFocus={this.handleFocus.bind(this)}/>
@@ -40,5 +44,6 @@ export default class CurrencyInput extends Component {
 }
 
 CurrencyInput.propTypes = {
-	defaultValue: PropTypes.number
+	defaultValue: PropTypes.number,
+	update: PropTypes.func
 }

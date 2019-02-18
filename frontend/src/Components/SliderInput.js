@@ -13,7 +13,8 @@ export default class SliderInput extends Component {
 	}
 
 	handleChange(e) {
-		const value = e.target.value
+		const value = parseFloat(e.target.value)
+		this.props.update(value)
 		this.setState({value})
 	}
 
@@ -35,5 +36,6 @@ export default class SliderInput extends Component {
 }
 
 SliderInput.propTypes = {
-	defaultValue: PropTypes.number
+	defaultValue: PropTypes.number,
+	update: PropTypes.func
 }
